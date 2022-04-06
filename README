@@ -1,0 +1,32 @@
+ic20int - referencni interpret ciloveho jazyka IFJcode20
+verze 2020-10-06
+
+Prubezne doplnovane informace najdete na Wiki predmetu IFJ na strance ic20int.
+
+CHANGES:
+  * 2020-10-06:
+    * opraven preklep v napovede
+  * 2020-10-05:
+    * zverejnena prvni verze interpretu (upravena kompatibilita s jazykem Go hlavne u instrukci READ, WRITE, IDIV atd.)
+
+
+Info k práci:
+Asi bych dal každou součást překladače do jednoho souboru a pak main do posledního, kterej si bude brát funkce z těch jednotlivejch součástí.
+(prakticky buď compiler.c nebo main.c nebo tak, kterej si jen zpracuje vstup a spustí nějakou kompilační funkci)
+
+1) lexikální analyzátor (skener)
+    - poskytuje funkci get_token, kterou když zavolá syntaktický analyzátor, tak lex_anal žere chary ze souboru dokud nedorazí na konec identifikátoru. (přeskakuje komentáře, atd.)
+    - ukládá to do nějaký struktury token, která bude obsahovat jednu proměnou typu enum pro typ tokenu a pak asi i ten obsah (normální string).
+    - implementace je konečnym automatem - takže asi obrovskej zacyklenej switch, kde se budou přehazovat stavy podle přijatejch znaků.
+    - to znamená getchar(), vyhodnotit, popř putchar() když už to do toho tokenu nepatří.
+    
+    
+2) syntaktický analyzátor (parser)
+    - žere tokeny a organizuje si kód do přikazů.
+    - proměnné ukládá do tabulky symbolů (to je naše 2. varianta zadání - prakticky jen zkopíruju hash table co byl v IJC)
+    - kontroluje jestli příkazy dávají smysl
+    - příkazy si postupně přetváří do složitějších, aby se pak dal vytvořit nějakej jasnej kód.
+    - vytváří mezikód (ten tříadresný?)
+    
+3) generátor kódu
+    - vyplivne z mezikódu kód
